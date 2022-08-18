@@ -1,3 +1,13 @@
+const buttons = document.querySelectorAll("button");
+const scoreboard = document.querySelector("#scoreboard");
+const winner = document.createElement('p');
+
+buttons.forEach(button => {
+    button.addEventListener("click", () => {
+        playRound(button.id, getComputerChoice())
+    });
+});
+
 function getComputerChoice() {
     let x = Math.floor(Math.random() * 3);
     if (x == 2) {
@@ -10,20 +20,36 @@ function getComputerChoice() {
 }
 
 function playRound(playerSelection, computerSelection) {
-    const rps = ["rock", "paper", "scissors"];
-    playerSelection = playerSelection.toLowerCase();
-    let playerIndex = rps.indexOf(playerSelection);
-    let computerIndex = rps.indexOf(computerSelection);
+    const rpsList = ["rock", "paper", "scissors"];
+    let playerScore = document.querySelector("#player-score");
+    let computerScore = document.querySelector("#computer-score");
+    let playerIndex = rpsList.indexOf(playerSelection);
+    let computerIndex = rpsList.indexOf(computerSelection);
 
-    if (playerIndex == (computerIndex + 1) % 3) {
-        return 0; // player won
-    } else if (playerIndex == (computerIndex - 1) % 3) {
-        return 1; // player lost
-    } else {
-        return 2; // tie
+    if (playerScore.textContent == 5 || computerScore.textContent == 5) {
+        playerScore.textContent = 0;
+        computerScore.textContent = 0;
+        scoreboard.removeChild(winner);
+    }
+
+    if (playerIndex == (computerIndex + 1) % 3) { // player won
+        playerScore.textContent = Number(playerScore.textContent) + 1;
+        if (playerScore.textContent == 5) {
+            winner.textContent = 'You Won!';
+            scoreboard.appendChild(winner);
+        }
+    } else if (playerIndex == (computerIndex + 2) % 3) { // player lost
+        computerScore.textContent = Number(computerScore.textContent) + 1;
+        if (computerScore.textContent == 5) {
+            winner.textContent = 'You Lost!';
+            scoreboard.appendChild(winner);
+        }
     }
 }
 
+
+
+/* 
 function game() {
     pWin = 0;
     cWin = 0;
@@ -55,3 +81,4 @@ function game() {
         console.log("You tied");
     }
 }
+*/
